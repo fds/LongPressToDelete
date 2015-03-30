@@ -38,7 +38,8 @@
         {
             snapView = [_containerView snapshotViewAfterScreenUpdates:NO];
             startPoint = [gesture locationInView:self.contentView];
-        
+            //重设layer锚点
+            snapView.layer.anchorPoint = CGPointMake(startPoint.x/snapView.layer.frame.size.width-0.1, startPoint.y/snapView.layer.frame.size.height-0.1);
             snapView.frame = _containerView.frame;
             snapView.transform = CGAffineTransformMakeRotation(M_PI/30);
             [self.contentView addSubview:snapView];
@@ -49,8 +50,9 @@
         case UIGestureRecognizerStateChanged:
         {
             CGPoint changePoint = [gesture locationInView:self.contentView];
-            snapView.center = changePoint;
-            
+            [UIView animateWithDuration:0.05 animations:^{
+                snapView.layer.position = changePoint;
+            }];
             break;
         }
         case UIGestureRecognizerStateEnded:
